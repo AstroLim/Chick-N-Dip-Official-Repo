@@ -40,7 +40,7 @@ export async function listMyInquiries({ userId, limit = 50, offset = 0 } = {}) {
   return data ?? [];
 }
 
-export async function listAllInquiriesAdmin({ limit = 100, offset = 0, status } = {}) {
+export async function listAllInquiriesAdmin({ limit = 100, offset = 0, status, includeDeleted = false } = {}) {
   let q = supabase
     .from("inquiries")
     .select("*")
@@ -48,6 +48,7 @@ export async function listAllInquiriesAdmin({ limit = 100, offset = 0, status } 
     .range(offset, offset + limit - 1);
 
   if (status) q = q.eq("status", status);
+  if (!includeDeleted) q = q.or("is_deleted.eq.false,is_deleted.is.null");
 
   const { data, error } = await q;
   if (error) throw error;

@@ -32,6 +32,15 @@ export async function removeItemFromSection({ menu_section_id, menu_item_id }) {
   return true;
 }
 
+export async function removeAllLinksForItem(menu_item_id) {
+  const { error } = await supabase
+    .from("MenuSectionItem")
+    .delete()
+    .eq("menu_item_id", menu_item_id);
+  if (error) throw error;
+  return true;
+}
+
 export async function listLinksAdmin() {
   const { data, error } = await supabase.from("MenuSectionItem").select("*");
   if (error) throw error;

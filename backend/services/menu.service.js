@@ -277,6 +277,18 @@ export const updateItem = itemRepo.updateItem;
  */
 export const deleteItem = itemRepo.deleteItem;
 
+/**
+ * Deletes a menu item and all its section links.
+ * Use this instead of deleteItem when the item may be linked in MenuSectionItem.
+ *
+ * @param {string} id - UUID of the menu item
+ * @returns {Promise<boolean>}
+ */
+export async function deleteMenuItem(id) {
+  await linkRepo.removeAllLinksForItem(id);
+  return itemRepo.deleteItem(id);
+}
+
 
 /* =========================================================
    5) Section ↔ Item Links

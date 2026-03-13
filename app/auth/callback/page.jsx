@@ -15,10 +15,10 @@ export default function AuthCallbackPage() {
 
       if (data?.session) {
         await applyPendingProfileIfAny();
-        router.replace("/");
+        window.location.href = "/admin";
       } else {
         setStatus("No session found. Please login.");
-        router.replace("/login");
+        router.replace("/user");
       }
     }
     run();

@@ -2,11 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { login } from "@/backend/services/auth.service";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -19,7 +17,7 @@ export default function LoginPage() {
 
     try {
       await login({ email, password });
-      router.replace("/");
+      window.location.href = "/admin";
     } catch (err) {
       setMsg(err?.message || "Login failed.");
     } finally {

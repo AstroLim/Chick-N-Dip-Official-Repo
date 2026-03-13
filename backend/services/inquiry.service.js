@@ -1,6 +1,7 @@
 import { supabase } from "../utils/supabase/client";
 import * as inquiryRepo from "../repositories/inquiry.repo";
 import * as msgRepo from "../repositories/inquiryMessage.repo";
+import * as accountRepo from "../repositories/account.repo";
 
 /**
  * Helpers
@@ -36,7 +37,6 @@ export async function getCurrentUserIdOrThrow() {
  */
 export async function createInquiryWithMessage({ subject, body }) {
   const userId = await getCurrentUserIdOrThrow();
-  console.log(userId);
 
   const cleanSubject = cleanText(subject);
   const cleanBody = cleanText(body);
@@ -98,7 +98,7 @@ export async function replyToInquiryAsAdmin({ inquiryId, body }) {
 }
 
 /**
- * Fetch inquiry + messages as a thread
+ * Fetch inquiry + messages as a thread, with creator profile for email reply
  */
 export async function getInquiryThread(inquiryId) {
   const [inquiry, messages] = await Promise.all([
@@ -106,7 +106,16 @@ export async function getInquiryThread(inquiryId) {
     msgRepo.listMessagesByInquiryId(inquiryId),
   ]);
 
-  return { inquiry, messages };
+  let creator = null;
+  if (inquiry?.created_by) {
+    try {
+      creator = await accountRepo.getProfileById(inquiry.created_by);
+    } catch {
+      creator = null;
+    }
+  }
+
+  return { inquiry, messages, creator };
 }
 
 /**

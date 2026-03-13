@@ -18,9 +18,9 @@ export async function getMyProfile() {
 
   const { data, error } = await supabase
     .from("profiles")
-    .select(`id,"FirstName","LastName","Email","Role","CreatedAt"`)
+    .select("*")
     .eq("id", user.id)
-    .single();
+    .maybeSingle();
 
   if (error) throw error;
   return data;
