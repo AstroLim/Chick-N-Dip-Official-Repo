@@ -1,4 +1,4 @@
-# Chick-N-Dip-Brand-Website
+# Chick-N-Dip-Official-Repo
 
 The official brand website for Chick N' Dip.
 
